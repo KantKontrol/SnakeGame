@@ -27,11 +27,34 @@
         let snakeY = (canvas.height / 2) - (snakeHeight / 2);
         const xv = 1;
         const yv = 1;
+        
+
+        //key controls
+        let keyList = new Map();
+
+        function calculateMove(){
+
+            if(keyList.has(37)){
+                snakeX -= xv;
+            }
+
+            if(keyList.has(38)){
+                snakeY -= yv;
+            }
+
+            if(keyList.has(39)){
+                snakeX += xv;
+            }
+
+            if(keyList.has(40)){
+                snakeY += yv;
+            }
+        }
 
 
         function drawSnake(){
             ctx.fillStyle = "red";
-            ctx.fillRect(snakeX += xv,snakeY += yv,snakeWidth,snakeHeight);
+            ctx.fillRect(snakeX,snakeY,snakeWidth,snakeHeight);
             ctx.stroke();
         }
 
@@ -40,6 +63,10 @@
 
             //clear canvas
             ctx.clearRect(0, 0, 400, 400);
+
+            calculateMove();
+
+         
             
             //draw objects
             drawSnake();
@@ -48,15 +75,52 @@
             window.requestAnimationFrame(draw);
         }
 
+
         document.addEventListener("keydown", (e) => {
-            if(e.code == "ArrowUp"){
-                console.log("UP!")
+            var code = e.keyCode;
+            switch (code) {
+                case 37: 
+                    keyList.set(code);
+                    break; //Left key
+                case 38: 
+                    keyList.set(code);
+                    break; //Up key
+                case 39:
+                    keyList.set(code);
+                    break; //Right key
+                case 40: 
+                    keyList.set(code);
+                    break; //Down key
+                default: 
+                    console.log("awaiting input");
             }
 
-            if(e.code == "ArrowDown"){
-                console.log("DOWN!")
+            console.log(keyList)
+        });
+
+        
+        document.addEventListener("keyup", (e) => {
+            var code = e.keyCode;
+            switch (code) {
+                case 37: 
+                    keyList.delete(code);
+                    break; //Left key
+                case 38: 
+                    keyList.delete(code);
+                    break; //Up key
+                case 39:
+                    keyList.delete(code);
+                    break; //Right key
+                case 40: 
+                    keyList.delete(code);
+                    break; //Down key
+                default: 
+                 console.log("awaiting release if input");
             }
-        })
+
+            console.log(keyList)
+        });
+
 
 
         
