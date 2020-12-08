@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <canvas id="snakeCanvas" width="800" height="600"></canvas>
 
 
     <script>
@@ -23,10 +23,14 @@
 
         const snakeWidth = 20;
         const snakeHeight = 20;
-        let snakeX = (canvas.width / 2) - (snakeWidth / 2);
-        let snakeY = (canvas.height / 2) - (snakeHeight / 2);
-        const xv = 2;
-        const yv = 2;
+        let snakeX = 40;
+        let snakeY = 40;
+        const xv = 20;
+        const yv = 20;
+
+        let fruitX = 0;
+        let fruitY = 0;
+        const fruitSize = 20;
         
 
         //key controls
@@ -51,30 +55,52 @@
             }
         }
 
+        function checkFruitCollision(){
+
+           if(fruitX > snakeX && (fruitX + fruitSize) < (snakeX + snakeWidth)){
+               if(fruitY > snakeY && (fruitY + fruitSize) < (snakeY + snakeHeight)){
+                   console.log("ate fruit")
+               }
+           }
+        }
+
+        function setFruitLoc(){
+
+            fruitX = Math.floor(Math.random() * Math.floor(800/20)) * 20;
+            fruitY = Math.floor(Math.random() * Math.floor(600/20)) * 20;
+        }
+
+        function drawFruit(){
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(fruitX, fruitY, fruitSize,fruitSize);
+        }
+
 
         function drawSnake(){
             ctx.fillStyle = "red";
             ctx.fillRect(snakeX,snakeY,snakeWidth,snakeHeight);
-            ctx.stroke();
+            
         }
 
 
         function draw(){
 
             //clear canvas
-            ctx.clearRect(0, 0, 400, 400);
+            ctx.clearRect(0, 0, 800, 600);
 
             //calculate collision, movement
             calculateMove();
+            checkFruitCollision();
 
             
             //draw objects
+            drawFruit();
             drawSnake();
+            ctx.stroke();
 
-            //animate
-            window.requestAnimationFrame(draw);
+            
         }
-
 
         document.addEventListener("keydown", (e) => {
             var code = e.keyCode;
@@ -103,8 +129,9 @@
         });
 
 
-        
-        draw();
+        setFruitLoc();
+
+        setInterval(draw, 60);
 
 
     </script>
