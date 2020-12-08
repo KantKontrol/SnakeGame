@@ -25,8 +25,8 @@
         const snakeHeight = 20;
         let snakeX = (canvas.width / 2) - (snakeWidth / 2);
         let snakeY = (canvas.height / 2) - (snakeHeight / 2);
-        const xv = 1;
-        const yv = 1;
+        const xv = 2;
+        const yv = 2;
         
 
         //key controls
@@ -34,19 +34,19 @@
 
         function calculateMove(){
 
-            if(keyList.has(37)){
+            if(keyList.has("LEFT")){
                 snakeX -= xv;
             }
 
-            if(keyList.has(38)){
+            if(keyList.has("UP")){
                 snakeY -= yv;
             }
 
-            if(keyList.has(39)){
+            if(keyList.has("RIGHT")){
                 snakeX += xv;
             }
 
-            if(keyList.has(40)){
+            if(keyList.has("DOWN")){
                 snakeY += yv;
             }
         }
@@ -64,9 +64,9 @@
             //clear canvas
             ctx.clearRect(0, 0, 400, 400);
 
+            //calculate collision, movement
             calculateMove();
 
-         
             
             //draw objects
             drawSnake();
@@ -79,17 +79,21 @@
         document.addEventListener("keydown", (e) => {
             var code = e.keyCode;
             switch (code) {
-                case 37: 
-                    keyList.set(code);
+                case 37:
+                    keyList.clear();
+                    keyList.set("LEFT", code);
                     break; //Left key
                 case 38: 
-                    keyList.set(code);
+                    keyList.clear();
+                    keyList.set("UP", code);
                     break; //Up key
                 case 39:
-                    keyList.set(code);
+                    keyList.clear();
+                    keyList.set("RIGHT", code);
                     break; //Right key
-                case 40: 
-                    keyList.set(code);
+                case 40:
+                    keyList.clear();
+                    keyList.set("DOWN", code);
                     break; //Down key
                 default: 
                     console.log("awaiting input");
@@ -97,30 +101,6 @@
 
             console.log(keyList)
         });
-
-        
-        document.addEventListener("keyup", (e) => {
-            var code = e.keyCode;
-            switch (code) {
-                case 37: 
-                    keyList.delete(code);
-                    break; //Left key
-                case 38: 
-                    keyList.delete(code);
-                    break; //Up key
-                case 39:
-                    keyList.delete(code);
-                    break; //Right key
-                case 40: 
-                    keyList.delete(code);
-                    break; //Down key
-                default: 
-                 console.log("awaiting release if input");
-            }
-
-            console.log(keyList)
-        });
-
 
 
         
