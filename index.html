@@ -20,6 +20,16 @@
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             border-radius: 10px;
             margin-bottom: 10px;
+            float: left;
+        }
+        #scoreCard {
+            float: left;
+            margin-left: 10px;
+            font-size: 2.5rem;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            text-align: center;
+            
         }
         #snakeCanvas {
             background-color: black;
@@ -30,6 +40,7 @@
     <div class="snake-holder">
         <h1 style="margin-left: auto; margin-right: auto; width: 200px;">Snake Game!</h1>
         <button id="startButton" class="button-style" >Start</button>
+        <h3 id="scoreCard">Score: 0</h3>
 
         <canvas id="snakeCanvas" width="800" height="600"></canvas>
     </div>
@@ -38,10 +49,14 @@
 
         let canvas = document.getElementById("snakeCanvas");
         let ctx = canvas.getContext("2d");
+
+        let scoreCard = document.getElementById("scoreCard");
+        let score = 0;
+
+
         let startGame = false;
         let gameLoop;
-        
-
+    
 
 
         let snake = [
@@ -75,6 +90,7 @@
             yv = 20;
              //clear canvas
             ctx.clearRect(0, 0, 800, 600);
+            score = 0;
             drawText("Press Start!");
         }
 
@@ -126,6 +142,8 @@
             snake.unshift(snakeHead); //bring it to front of array
 
             if(snake[0].x === fruitX && snake[0].y === fruitY){ //if we eat
+                score+=10;
+                scoreCard.innerHTML = "Score: " + score;
                 setFruitLoc(); //change location of fruit
             }
             else {
