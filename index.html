@@ -136,20 +136,28 @@
             var code = e.keyCode;
             switch (code) {
                 case 37:
-                    keyList.clear();
-                    keyList.set("LEFT", code);
+                    if(!keyList.has("RIGHT")){
+                        keyList.clear();
+                        keyList.set("LEFT", code);
+                    }
                     break; //Left key
-                case 38: 
-                    keyList.clear();
-                    keyList.set("UP", code);
+                case 38:
+                    if(!keyList.has("DOWN")){
+                        keyList.clear();
+                        keyList.set("UP", code);
+                    }
                     break; //Up key
                 case 39:
-                    keyList.clear();
-                    keyList.set("RIGHT", code);
+                    if(!keyList.has("LEFT")){
+                        keyList.clear();
+                        keyList.set("RIGHT", code);
+                    }
                     break; //Right key
                 case 40:
-                    keyList.clear();
-                    keyList.set("DOWN", code);
+                    if(!keyList.has("UP")){
+                        keyList.clear();
+                        keyList.set("DOWN", code);
+                    }
                     break; //Down key
                 default: 
                     console.log("awaiting input");
