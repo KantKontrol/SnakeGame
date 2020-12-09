@@ -21,19 +21,23 @@
         let canvas = document.getElementById("snakeCanvas");
         let ctx = canvas.getContext("2d");
 
+        let snake = [
+            {x: 100, y: 100},
+            {x: 120, y:100},
+            {x: 140, y:100}
+        ];
+
         const snakeWidth = 20;
         const snakeHeight = 20;
         let snakeX = 40;
         let snakeY = 40;
-        const xv = 20;
-        const yv = 20;
-        let tail = 0;
-        let maxLength = 10;
+        let xv = 0;
+        let yv = 20;
+        const VELOCITY = 20;
 
         let fruitX = 0;
         let fruitY = 0;
         const fruitSize = 20;
-        
 
         //key controls
         let keyList = new Map();
@@ -41,38 +45,24 @@
         function calculateMove(){
 
             if(keyList.has("LEFT")){
-                snakeX -= xv;
+                xv = VELOCITY * -1;
+                yv = 0;
             }
 
             if(keyList.has("UP")){
-                snakeY -= yv;
+                xv = 0;
+                yv = VELOCITY * -1;
             }
 
             if(keyList.has("RIGHT")){
-                snakeX += xv;
+                xv = VELOCITY;
+                yv = 0;
             }
 
             if(keyList.has("DOWN")){
-                snakeY += yv;
+                xv = 0;
+                yv = VELOCITY;
             }
-        }
-
-        function checkFruitCollision(){
-
-           if(fruitX >= snakeX && (fruitX + fruitSize) <= (snakeX + snakeWidth)){
-               if(fruitY >= snakeY && (fruitY + fruitSize) <= (snakeY + snakeHeight)){
-                    processFruitHit();
-               }
-           }
-        }
-
-        function processFruitHit(){
-
-            setFruitLoc();
-            if(tail + 1 < maxLength){
-                tail+=1;
-            }
-
         }
 
         function setFruitLoc(){
@@ -88,29 +78,27 @@
         }
 
 
-        function drawSnake(){
-            ctx.fillStyle = "red";
-            ctx.fillRect(snakeX,snakeY,snakeWidth,snakeHeight);
+        function moveSnake(){
 
-            for(let i=1; i <= tail;i++){
-                if(keyList.has("LEFT")){
-                    ctx.fillRect(snakeX + (snakeWidth * i), snakeY ,snakeWidth,snakeHeight);
-                }
+            const snakeHead = {x: snake[0].x + xv, y: snake[0].y + yv} //set our snake head
+            snake.unshift(snakeHead); //bring it to front of array
 
-                if(keyList.has("UP")){
-                    ctx.fillRect(snakeX, snakeY + (snakeHeight * i) ,snakeWidth,snakeHeight);
-                }
-
-                if(keyList.has("RIGHT")){
-                    ctx.fillRect(snakeX - (snakeWidth * i), snakeY ,snakeWidth,snakeHeight);
-                }
-
-                if(keyList.has("DOWN")){
-                    ctx.fillRect(snakeX, snakeY - (snakeHeight * i) ,snakeWidth,snakeHeight);
-                }
-                
+            if(snake[0].x === fruitX && snake[0].y === fruitY){ //if we eat
+                setFruitLoc(); //change location of fruit
             }
-            
+            else {
+               snake.pop(); //get rid of end of snake
+            }
+
+            //Basically what snake.unshift is doing is adding an element to the front of the array, the 'head', since we added, we have to remove to keep the same size
+            //hence snake.pop to remove the length we dont want to add. therefore when we eat, we don't snake.pop so that the extra length stays, cause now we need it :)
+        }
+        
+        function drawSnake(){
+            snake.forEach((sPiece) => {
+                ctx.fillStyle = "red";
+                ctx.fillRect(sPiece.x,sPiece.y,snakeWidth,snakeHeight);
+            });
         }
 
 
@@ -121,15 +109,13 @@
 
             //calculate collision, movement
             calculateMove();
-            checkFruitCollision();
+            moveSnake();
 
             
             //draw objects
             drawFruit();
             drawSnake();
             ctx.stroke();
-
-            
         }
 
         document.addEventListener("keydown", (e) => {
@@ -162,16 +148,11 @@
                 default: 
                     console.log("awaiting input");
             }
-
-            console.log(keyList)
         });
 
 
         setFruitLoc();
-
         setInterval(draw, 60);
-
-
     </script>
 
     
