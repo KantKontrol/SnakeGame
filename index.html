@@ -6,20 +6,43 @@
     <title>JS Snake Game</title>
 
     <style>
+        .snake-holder{
+            margin-left: auto;
+            margin-right: auto;
+            width: 800px;
+        }
+        .button-style {
+            width: 200px;
+            height: 100px;
+            background-color: crimson;
+            color: white;
+            font-size: 2rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
         #snakeCanvas {
             background-color: black;
         }
     </style>
 </head>
 <body>
+    <div class="snake-holder">
+        <h1 style="margin-left: auto; margin-right: auto; width: 200px;">Snake Game!</h1>
+        <button id="startButton" class="button-style" >Start</button>
 
-    <canvas id="snakeCanvas" width="800" height="600"></canvas>
-
+        <canvas id="snakeCanvas" width="800" height="600"></canvas>
+    </div>
 
     <script>
 
         let canvas = document.getElementById("snakeCanvas");
         let ctx = canvas.getContext("2d");
+        let startGame = false;
+
+        document.getElementById("startButton").addEventListener("click", function(e){
+            startGame = true;
+        });
 
         let snake = [
             {x: 100, y: 100},
@@ -104,18 +127,21 @@
 
         function draw(){
 
-            //clear canvas
-            ctx.clearRect(0, 0, 800, 600);
+            if(startGame){
+                //clear canvas
+                ctx.clearRect(0, 0, 800, 600);
 
-            //calculate collision, movement
-            calculateMove();
-            moveSnake();
+                //calculate collision, movement
+                calculateMove();
+                moveSnake();
 
+                
+                //draw objects
+                drawFruit();
+                drawSnake();
+                ctx.stroke();
+            }
             
-            //draw objects
-            drawFruit();
-            drawSnake();
-            ctx.stroke();
         }
 
         document.addEventListener("keydown", (e) => {
@@ -153,6 +179,7 @@
 
         setFruitLoc();
         setInterval(draw, 60);
+
     </script>
 
     
