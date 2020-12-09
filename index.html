@@ -39,10 +39,10 @@
         let canvas = document.getElementById("snakeCanvas");
         let ctx = canvas.getContext("2d");
         let startGame = false;
+        let gameLoop;
+        
 
-        document.getElementById("startButton").addEventListener("click", function(e){
-            startGame = true;
-        });
+
 
         let snake = [
             {x: 100, y: 100},
@@ -52,8 +52,6 @@
 
         const snakeWidth = 20;
         const snakeHeight = 20;
-        let snakeX = 40;
-        let snakeY = 40;
         let xv = 0;
         let yv = 20;
         const VELOCITY = 20;
@@ -65,8 +63,22 @@
         //key controls
         let keyList = new Map();
 
-        function calculateMove(){
+        function resetGame(){
+            clearInterval(gameLoop);
+            startGame = false;
+            snake = [
+                {x: 100, y: 100},
+                {x: 120, y:100},
+                {x: 140, y:100}
+            ];
+            xv = 0;
+            yv = 20;
+             //clear canvas
+            ctx.clearRect(0, 0, 800, 600);
+            drawText("Press Start!");
+        }
 
+        function calculateMove(){
             if(keyList.has("LEFT")){
                 xv = VELOCITY * -1;
                 yv = 0;
@@ -88,14 +100,21 @@
             }
         }
 
-        function setFruitLoc(){
+        function checkGameEnd() {
+            const hitLeftWall = snake[0].x < 0;
+            const hitRightWall = (snake[0].x + snakeWidth) > 800;
+            const hitTopWall = snake[0].y < 0;
+            const hitBottomWall = (snake[0].y + snakeHeight) > 600;
 
+            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
+        }
+
+        function setFruitLoc(){
             fruitX = Math.floor(Math.random() * Math.floor(800/20)) * 20;
             fruitY = Math.floor(Math.random() * Math.floor(600/20)) * 20;
         }
 
         function drawFruit(){
-
             ctx.fillStyle = "white";
             ctx.fillRect(fruitX, fruitY, fruitSize,fruitSize);
         }
@@ -124,61 +143,84 @@
             });
         }
 
+        function drawText(text){
+            ctx.fillStyle = "white";
+            ctx.font = "80px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(text, canvas.width/2, canvas.height/2);
+        }
+
 
         function draw(){
 
             if(startGame){
-                //clear canvas
-                ctx.clearRect(0, 0, 800, 600);
 
-                //calculate collision, movement
-                calculateMove();
-                moveSnake();
+                if(!checkGameEnd()){
+                    //clear canvas
+                    ctx.clearRect(0, 0, 800, 600);
 
-                
-                //draw objects
-                drawFruit();
-                drawSnake();
-                ctx.stroke();
+                    //calculate collision, movement
+                    calculateMove();
+                    moveSnake();
+
+                    
+                    //draw objects
+                    drawFruit();
+                    drawSnake();
+                    ctx.stroke();
+                }
+                else {
+                    resetGame();
+                }
             }
-            
+            console.log("running")
         }
 
         document.addEventListener("keydown", (e) => {
             var code = e.keyCode;
-            switch (code) {
-                case 37:
-                    if(!keyList.has("RIGHT")){
-                        keyList.clear();
-                        keyList.set("LEFT", code);
-                    }
-                    break; //Left key
-                case 38:
-                    if(!keyList.has("DOWN")){
-                        keyList.clear();
-                        keyList.set("UP", code);
-                    }
-                    break; //Up key
-                case 39:
-                    if(!keyList.has("LEFT")){
-                        keyList.clear();
-                        keyList.set("RIGHT", code);
-                    }
-                    break; //Right key
-                case 40:
-                    if(!keyList.has("UP")){
-                        keyList.clear();
-                        keyList.set("DOWN", code);
-                    }
-                    break; //Down key
-                default: 
-                    console.log("awaiting input");
+            if(startGame){
+                switch (code) {
+                    case 37:
+                        if(!keyList.has("RIGHT")){
+                            keyList.clear();
+                            keyList.set("LEFT", code);
+                        }
+                        break; //Left key
+                    case 38:
+                        if(!keyList.has("DOWN")){
+                            keyList.clear();
+                            keyList.set("UP", code);
+                        }
+                        break; //Up key
+                    case 39:
+                        if(!keyList.has("LEFT")){
+                            keyList.clear();
+                            keyList.set("RIGHT", code);
+                        }
+                        break; //Right key
+                    case 40:
+                        if(!keyList.has("UP")){
+                            keyList.clear();
+                            keyList.set("DOWN", code);
+                        }
+                        break; //Down key
+                    default: 
+                        console.log("awaiting input");
+                }
             }
         });
 
 
-        setFruitLoc();
-        setInterval(draw, 60);
+        document.getElementById("startButton").addEventListener("click", function(e){
+            if(!startGame){
+                startGame = true;
+                setFruitLoc();
+                gameLoop = setInterval(draw, 60);
+            }
+        });
+
+        drawText("Press Start!");
+
 
     </script>
 
