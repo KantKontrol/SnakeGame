@@ -27,6 +27,8 @@
         let snakeY = 40;
         const xv = 20;
         const yv = 20;
+        let tail = 0;
+        let maxLength = 10;
 
         let fruitX = 0;
         let fruitY = 0;
@@ -57,11 +59,20 @@
 
         function checkFruitCollision(){
 
-           if(fruitX > snakeX && (fruitX + fruitSize) < (snakeX + snakeWidth)){
-               if(fruitY > snakeY && (fruitY + fruitSize) < (snakeY + snakeHeight)){
-                   console.log("ate fruit")
+           if(fruitX >= snakeX && (fruitX + fruitSize) <= (snakeX + snakeWidth)){
+               if(fruitY >= snakeY && (fruitY + fruitSize) <= (snakeY + snakeHeight)){
+                    processFruitHit();
                }
            }
+        }
+
+        function processFruitHit(){
+
+            setFruitLoc();
+            if(tail + 1 < maxLength){
+                tail+=1;
+            }
+
         }
 
         function setFruitLoc(){
@@ -80,6 +91,25 @@
         function drawSnake(){
             ctx.fillStyle = "red";
             ctx.fillRect(snakeX,snakeY,snakeWidth,snakeHeight);
+
+            for(let i=1; i <= tail;i++){
+                if(keyList.has("LEFT")){
+                    ctx.fillRect(snakeX + (snakeWidth * i), snakeY ,snakeWidth,snakeHeight);
+                }
+
+                if(keyList.has("UP")){
+                    ctx.fillRect(snakeX, snakeY + (snakeHeight * i) ,snakeWidth,snakeHeight);
+                }
+
+                if(keyList.has("RIGHT")){
+                    ctx.fillRect(snakeX - (snakeWidth * i), snakeY ,snakeWidth,snakeHeight);
+                }
+
+                if(keyList.has("DOWN")){
+                    ctx.fillRect(snakeX, snakeY - (snakeHeight * i) ,snakeWidth,snakeHeight);
+                }
+                
+            }
             
         }
 
