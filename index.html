@@ -6,6 +6,10 @@
     <title>JS Snake Game</title>
 
     <style>
+
+        body {
+
+        }
         .snake-holder{
             margin-left: auto;
             margin-right: auto;
@@ -14,7 +18,7 @@
         .button-style {
             width: 200px;
             height: 100px;
-            background-color: crimson;
+            background-color: #ee4266;
             color: white;
             font-size: 2rem;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -41,11 +45,13 @@
         <h1 style="margin-left: auto; margin-right: auto; width: 200px;">Snake Game!</h1>
         <button id="startButton" class="button-style" >Start</button>
         <h3 id="scoreCard">Score: 0</h3>
-
-        <canvas id="snakeCanvas" width="800" height="600"></canvas>
+        <canvas id="snakeCanvas" style="background-color: #23F0C7;" width="800" height="600"></canvas>
     </div>
 
     <script>
+
+        let appleImage = new Image();
+        appleImage.src = "./assets/apple.png";
 
         let canvas = document.getElementById("snakeCanvas");
         let ctx = canvas.getContext("2d");
@@ -90,7 +96,6 @@
             yv = 20;
              //clear canvas
             ctx.clearRect(0, 0, 800, 600);
-            score = 0;
             drawText("Press Start!");
         }
 
@@ -131,8 +136,12 @@
         }
 
         function drawFruit(){
+
+           
             ctx.fillStyle = "white";
             ctx.fillRect(fruitX, fruitY, fruitSize,fruitSize);
+
+            ctx.drawImage(appleImage, fruitX, fruitY, fruitSize,fruitSize);
         }
 
 
@@ -156,13 +165,15 @@
         
         function drawSnake(){
             snake.forEach((sPiece) => {
-                ctx.fillStyle = "red";
+                ctx.fillStyle = "#38023B";
                 ctx.fillRect(sPiece.x,sPiece.y,snakeWidth,snakeHeight);
+                ctx.fillStyle = "white";
+                ctx.strokeRect(sPiece.x,sPiece.y,snakeWidth,snakeHeight);
             });
         }
 
         function drawText(text){
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "#ee4266";
             ctx.font = "80px Arial";
             ctx.textAlign = "center";
             ctx.fillText(text, canvas.width/2, canvas.height/2);
@@ -232,6 +243,8 @@
         document.getElementById("startButton").addEventListener("click", function(e){
             if(!startGame){
                 startGame = true;
+                score = 0;
+                scoreCard.innerHTML = "Score: " + score;
                 setFruitLoc();
                 gameLoop = setInterval(draw, 60);
             }
