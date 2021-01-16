@@ -55,10 +55,10 @@
         appleImage.src = "./assets/apple.png";
         snakeHeadIMG.src = "./assets/shead.png";
 
-        let canvas = document.getElementById("snakeCanvas");
-        let ctx = canvas.getContext("2d");
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
 
-        let scoreCard = document.getElementById("scoreCard");
+        const scoreCard = document.getElementById("scoreCard");
         let score = 0;
 
 
@@ -168,7 +168,11 @@
         function drawSnake(){
             snake.forEach((sPiece, i) => {
                 if(i == 0){
-                   ctx.drawImage(snakeHeadIMG, sPiece.x,sPiece.y,snakeWidth,snakeHeight);
+                  //  ctx.save();
+                   // ctx.translate(sPiece.x,sPiece.y);
+                   // ctx.rotate(90);
+                    ctx.drawImage(snakeHeadIMG, sPiece.x,sPiece.y,snakeWidth,snakeHeight);
+                  //  ctx.restore();
                 }
                 else {
                     ctx.fillStyle = "#38023B";
