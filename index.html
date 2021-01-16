@@ -68,9 +68,9 @@
 
 
         let snake = [
-            {x: 100, y: 100},
-            {x: 120, y:100},
-            {x: 140, y:100}
+            {x: 300, y: 200},
+            {x: 320, y: 200},
+            {x: 340, y: 200}
         ];
 
         const snakeWidth = 20;
@@ -139,8 +139,7 @@
 
         function drawFruit(){
 
-           
-            ctx.fillStyle = "white";
+          
             ctx.fillRect(fruitX, fruitY, fruitSize,fruitSize);
 
             ctx.drawImage(appleImage, fruitX, fruitY, fruitSize,fruitSize);
